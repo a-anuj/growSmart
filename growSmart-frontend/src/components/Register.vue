@@ -1,5 +1,8 @@
 <template>
-    <h1>Hello</h1>
+    <h1>Register</h1>
+    <router-link to="/login">
+            <button>Login Now</button>
+    </router-link>
 </template>
 
 

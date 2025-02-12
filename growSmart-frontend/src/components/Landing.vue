@@ -1,5 +1,11 @@
 <template>
-    <div class="container">
+    <div v-if="loading" class="loader-container">
+      <div class="loader">
+        🌱🌲🌾
+      </div>
+    </div>
+  
+    <div v-else class="container">
       <div class="textfield">
         <h1><span ref="typedText" class="text-green-600"></span></h1>
         <p>
@@ -7,7 +13,9 @@
           Get real-time insights, personalized guidance, and grow fresh,<br />
           organic produce right from your home—no experience needed!
         </p>
-        <button>Register Now</button>
+        <router-link to="/register">
+            <button>Register Now</button>
+        </router-link>
       </div>
       <div class="imagefield">
         <div class="img">
@@ -16,120 +24,128 @@
       </div>
     </div>
   </template>
-
-
-
-
-<script setup>
-import { onMounted, ref } from "vue";
-import Typed from "typed.js";
-
-const typedText = ref(null);
-const imageSrc = "/src/assets/images/freepik__the-style-is-candid-image-photography-with-natural__4038.png"; 
-
-onMounted(() => {
-  new Typed(typedText.value, {
-    strings: ["Harvest Fresh,", "Right at Home! 🏡"],
-    typeSpeed: 50,
-    backSpeed: 30,
-    backDelay: 1000,
-    loop: true,
+  
+  <script setup>
+  import { onMounted, ref, nextTick } from "vue";
+  import Typed from "typed.js";
+  
+  const typedText = ref(null);
+  const imageSrc = "/src/assets/animations/finalgif.gif"; 
+  const loading = ref(true);
+  
+  onMounted(() => {
+    setTimeout(async () => {
+      loading.value = false;
+  
+      // Ensure DOM updates before initializing Typed.js
+      await nextTick();
+  
+      new Typed(typedText.value, {
+        strings: ["Harvest Fresh,", "Right at Home! 🏡"],
+        typeSpeed: 50,
+        backSpeed: 30,
+        backDelay: 1000,
+        loop: true,
+      });
+    }, 2000); // Simulate a 2-second loading time
   });
-});
-</script>
-
-<style scoped>
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-.container{
+  </script>
+  
+  <style scoped>
+  /* LOADER STYLES */
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #F3F8F1;
+  }
+  
+  .loader {
+    font-size: 30px;
+    font-weight: bold;
+    color: #86d345;
+    animation: growFade 2s ease-in-out infinite;
+  }
+  
+  @keyframes growFade {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.5; }
+  }
+  
+  /* EXISTING PAGE STYLES */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  .container {
     background-color: #F3F8F1; 
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    height: 100vh; /* Full viewport height */
-    gap: 50px; /* Adds spacing between text and image */
-}
-
-.textfield{
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 50px;
+  }
+  
+  .textfield {
     animation: fadeInUp 2s ease-out;
-}
-
-.imagefield {
+  }
+  
+  .imagefield {
     animation: fadeInRight 2s ease-out;
-}
-
-.textfield h1{
+  }
+  
+  .textfield h1 {
     font-family: "Poppins", serif;
-    font-optical-sizing: auto;
-    font-weight: Black (900);  /* Set to Black (900) */
-    font-style: normal;
+    font-weight: 900;
     font-size: 60px;
     margin-top: -170px;
     margin-left: 100px;
-}
-
-.textfield p{
-    margin-left:100px ;
+  }
+  
+  .textfield p {
+    margin-left: 100px;
     margin-top: 30px;
     font-family: "Poppins", serif;
-    font-optical-sizing: auto;
-    font-weight: Black (100);  /* Set to Black (900) */
-    font-style: normal;
     font-size: 20px;
-}
-
-.textfield button{
+  }
+  
+  .textfield button {
     margin-top: 25px;
     margin-left: 100px;
     padding: 15px;
     background-color: white;
-    border:2px solid #86d345 ;
+    border: 2px solid #86d345;
     border-radius: 10px;
     font-family: "Poppins", serif;
-    font-optical-sizing: auto;
-    font-weight: Black (100);
     font-size: 15px;
     cursor: pointer;
     transition: 500ms;
-}
-
-.textfield button:hover{
-    transition: 500ms;
+  }
+  
+  .textfield button:hover {
     background-color: #a9e22b;
-}
-
-.imagefield {
+  }
+  
+  .imagefield {
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    flex: 1; /* Takes equal space as textfield */
-}
-
-.imagefield img {
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+  
+  .imagefield img {
     height: 500px;
     width: 500px;
-    object-fit: cover; /* Ensures the image fits well */
+    object-fit: cover;
     border-radius: 50px;
-}
-
-</style>
+  }
+  </style>
+  

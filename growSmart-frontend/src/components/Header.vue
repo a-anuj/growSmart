@@ -8,7 +8,9 @@
             <li class="nav-item">About Us</li>
             <li class="nav-item">Contact</li>
         </ul>
-        <button>Sign-Up / Sign-In</button>
+        <router-link to="/register">
+            <button>Sign-Up / Sign-In</button>
+        </router-link>
     </nav>
 </template>
 

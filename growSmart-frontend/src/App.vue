@@ -1,6 +1,6 @@
 <template>
-  <Header />
-  <Landing />
+  <Header />  
+  <router-view></router-view>
 </template>
 
 <script>

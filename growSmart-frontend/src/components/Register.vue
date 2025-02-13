@@ -21,8 +21,8 @@
                     <input class="emailfield" type="text" required v-model="email" placeholder="abc@gmail.com" id="email">
                     <label class="password">Password</label>
                     <input class="passwordfield" type="password" required v-model="password" placeholder="*****" id="password">
-                
-                <button type="submit" class="register-btn">Register</button>
+                        <button type="submit" class="register-btn">Register</button>
+                    
                 <router-link to="/login">
                     <p class="already">Already have an account?</p>
                 </router-link>
@@ -62,26 +62,36 @@ export default {
             this.currentIndex = (this.currentIndex + 1) % this.images.length;
         },
         async handleSubmit() {
-        const formData = {
-            firstName: this.firstName,
-            lastName: this.lastName,
-            email: this.email,
-            password: this.password,
-        };
+    const formData = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        password: this.password,
+    };
 
-        try {
-            const response = await fetch("http://127.0.0.1:5000/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
+    try {
+        const response = await fetch("http://127.0.0.1:5000/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+        });
 
-            const result = await response.json();
-            console.log(result.message); // Should print "Registration successful!"
-        } catch (error) {
-            console.error("Error submitting form:", error);
+        const result = await response.json();
+        console.log(result.message); // Debugging message
+
+        if (response.ok) {
+            alert("Registration successful! Redirecting to login...");
+            this.$router.push("/login"); // Redirect to login page
+        } else {
+            alert(result.message); // Show error message if registration fails
         }
-    }   
+
+    } catch (error) {
+        console.error("Error submitting form:", error);
+        alert("Something went wrong. Please try again.");
+    }
+}
+
     }
 };
 </script>

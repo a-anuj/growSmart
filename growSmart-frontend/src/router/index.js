@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import RegisterView from '/home/anuj/Desktop/THIRAN/growSmart/growSmart-frontend/src/components/Register.vue'
 import LandingView from '/src/components/Landing.vue'
 import LoginView from '/src/components/Login.vue'
+import PlantDashboard from '/src/components/PlantDashboard.vue'
 
 const routes = [
     {
@@ -18,6 +19,11 @@ const routes = [
         path:'/login',
         name:'login',
         component:LoginView
+    },
+    {
+        path:'/plant-dashboard  ',
+        name:'PlantDashboard',
+        component:PlantDashboard
     },
 ]
 

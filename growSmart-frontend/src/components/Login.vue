@@ -13,13 +13,15 @@
             <!-- Registration Form -->
             <div class="formfield">
                 <h1>Login 📝</h1>
-                <form @submit="handleSubmit">
+                <form @submit.prevent="handleSubmit">
                     <label class="email">Email</label>
                     <input class="emailfield" type="text" required v-model="email" placeholder="abc@gmail.com" id="email">
                     <label class="password">Password</label>
                     <input class="passwordfield" type="password" required v-model="password" placeholder="*****" id="password">
+                    <button type="submit" class="register-btn">Login</button>
+
                 </form>
-                <button type="submit" class="register-btn">Login</button>
+                
                 <router-link to="/register">
                     <p class="already">Do not have an account?</p>
                 </router-link>
@@ -29,20 +31,22 @@
 </template>
 
 <script>
-import image1 from '/src/assets/images/plantpic.png'
-import image2 from '/src/assets/images/photo1.jpeg'
-import image3 from '/src/assets/images/photo2.jpeg'
-import image4 from '/src/assets/images/photo3.jpeg'
+import image1 from '/src/assets/images/plantpic.png';
+import image2 from '/src/assets/images/photo1.jpeg';
+import image3 from '/src/assets/images/photo2.jpeg';
+import image4 from '/src/assets/images/photo3.jpeg';
 
 export default {
     data() {
         return {
             images: [image1, image2, image3, image4],
             currentIndex: 0,
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
+            formData: {
+                firstName: "",
+                lastName: "",
+                email: "",
+                password: "",
+            }
         };
     },
     computed: {
@@ -51,18 +55,65 @@ export default {
         }
     },
     mounted() {
-        setInterval(this.nextImage, 3000); // Change image every 3 seconds
+        this.imageInterval = setInterval(this.nextImage, 3000); // Change image every 3 seconds
+    },
+    beforeUnmount() {
+        clearInterval(this.imageInterval); // Clear interval when component is destroyed
     },
     methods: {
         nextImage() {
             this.currentIndex = (this.currentIndex + 1) % this.images.length;
         },
-        handleSubmit(event) {
-            console.log("Form Submitted:", this.firstName, this.lastName, this.email);
+        async handleSubmit() {
+    const formData = {
+        email: this.email,
+        password: this.password,
+    };
+
+    try {
+        const response = await fetch("http://127.0.0.1:5000/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+        console.log("Server response:", result); // ✅ Debugging
+
+        if (!response.ok) {
+            alert(result.message);
+            return;
         }
+
+        if (result.user && result.user.first_name) {
+            console.log("Login successful. Redirecting to PlantDashboard...");
+
+            console.log("Router instance:", this.$router);
+            console.log("Routes available:", this.$router.getRoutes());
+
+            this.$router.push({ 
+                name: "PlantDashboard", 
+                query: { firstName: result.user.first_name } 
+            });
+        } else {
+            console.error("User data missing:", result);
+            alert("Login successful, but user data is incomplete.");
+        }
+
+    } catch (error) {
+        console.error("Error during login:", error);
+        alert("Something went wrong. Please try again.");
+    }
+}
+
+
+
+
+
     }
 };
 </script>
+
 
 <style scoped>
 

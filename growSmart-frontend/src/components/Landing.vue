@@ -14,12 +14,13 @@
           organic produce right from your home—no experience needed!
         </p>
         <router-link to="/register">
-            <button>Register Now</button>
+            <button>Start Growing
+            </button>
         </router-link>
       </div>
       <div class="imagefield">
         <div class="img">
-          <img :src="imageSrc" alt="Gardening Image" />
+          <img src="/finalgif.gif" />
         </div>
       </div>
     </div>
@@ -30,7 +31,7 @@
   import Typed from "typed.js";
   
   const typedText = ref(null);
-  const imageSrc = "/src/assets/animations/finalgif.gif"; 
+  const imageSrc = "/home/anuj/Desktop/THIRAN/growSmart/growSmart-frontend/src/assets/images/finalgif.gif"; 
   const loading = ref(true);
   
   onMounted(() => {

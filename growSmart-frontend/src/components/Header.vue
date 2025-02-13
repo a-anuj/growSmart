@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import logoimage from '/src/assets/images/Pasted_image.png'
+import logoimage from '/src/assets/images/image-removebg-preview.png'
 export default{
     data(){
         return{
@@ -49,17 +49,19 @@ export default{
 }
 /* Navbar container */
 .navbar {
+    background: #E8F5E9;
   display: flex;
   align-items: center;
   padding: 15px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
 }
 
 /* Logo styles */
 .logo {
   font-size: 24px;
   font-weight: bold;
-  margin-right: 450px;
+  margin-right: 500px;
   margin-left: 80px;
   height: 50px;
 
@@ -69,7 +71,7 @@ export default{
 .navitems {
   list-style: none;
   display: inline-flex;
-  gap: 25px; /* Space between items */
+  gap: 30px; /* Space between items */
   margin: 0;
   padding: 0;
 }
@@ -84,14 +86,16 @@ export default{
   font-size: 14px;
   padding: 8px;
   transition:500ms;
+  border-radius: 10px;
 
 }
 
 .nav-item:hover {
   padding: 8px;
-  border-radius: 10px;
-  background-color: #a9e22b;
-  transition: 500ms;
+  background: #218838; /* Darker green */
+transform: scale(1.05); /* Slight pop effect */
+  transition: all 0.3s ease-in-out;
+  color: white;
 }
 
 .navbar button{
@@ -102,8 +106,11 @@ export default{
     transition: 500ms;
     cursor: pointer;
 }
-.navbar button:hover{
-    background-color: gray;
-    transition: 500ms;
+.navbar button:hover{    
+    background: #218838; /* Darker green */
+    color: white;
+    transform: scale(1.05); /* Slight pop effect */
+    transition: all 0.3s ease-in-out;
+
 }
 </style>

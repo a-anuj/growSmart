@@ -31,12 +31,16 @@
 </template>
 
 <script>
+import Header from './Header.vue';
 import image1 from '/src/assets/images/plantpic.png';
 import image2 from '/src/assets/images/photo1.jpeg';
 import image3 from '/src/assets/images/photo2.jpeg';
 import image4 from '/src/assets/images/photo3.jpeg';
 
 export default {
+    components:{
+        Header,
+    },
     data() {
         return {
             images: [image1, image2, image3, image4],
@@ -46,7 +50,8 @@ export default {
                 lastName: "",
                 email: "",
                 password: "",
-            }
+            },
+            isLoggedIn:false
         };
     },
     computed: {
@@ -87,10 +92,6 @@ export default {
 
         if (result.user && result.user.first_name) {
             console.log("Login successful. Redirecting to PlantDashboard...");
-
-            console.log("Router instance:", this.$router);
-            console.log("Routes available:", this.$router.getRoutes());
-
             this.$router.push({ 
                 name: "PlantDashboard", 
                 query: { firstName: result.user.first_name } 
@@ -104,7 +105,7 @@ export default {
         console.error("Error during login:", error);
         alert("Something went wrong. Please try again.");
     }
-}
+    }     
 
 
 

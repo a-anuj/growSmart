@@ -1,5 +1,5 @@
 <template>
-    <p>Good morning, Anuj! 🌞 Your plants are thriving! Here’s today’s care schedule.</p>
+    <p>Good morning, {{ this.firstName }} 🌞 Your plants are thriving! Here’s today’s care schedule.</p>
 </template>
 
 <script>

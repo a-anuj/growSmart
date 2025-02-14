@@ -23,7 +23,8 @@ const routes = [
     {
         path:'/plant-dashboard  ',
         name:'PlantDashboard',
-        component:PlantDashboard
+        component:PlantDashboard,
+        props: route => ({ firstName: route.query.firstName })
     },
 ]
 

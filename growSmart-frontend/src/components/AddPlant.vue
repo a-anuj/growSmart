@@ -93,6 +93,7 @@ methods: {
 
             if (response.ok) {
                 alert("Plant added successfully!");
+                this.$router.push({name:"PlantDashboard"})
                 this.resetForm();  // Optionally reset the form after submission
             } else {
                 alert(result.message); // Show error message if adding plant fails

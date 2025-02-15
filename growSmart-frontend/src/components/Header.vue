@@ -32,7 +32,7 @@ export default{
             return this.$route.name === "PlantDashboard"; // Show Add Plant only on dashboard
         },
         showDashboard(){
-            return this.$route.name === "AddPlant";
+            return this.$route.name === "AddPlant" || this.$route.name === "community";
         },
         showCommunity(){
             return this.$route.name === "PlantDashboard";

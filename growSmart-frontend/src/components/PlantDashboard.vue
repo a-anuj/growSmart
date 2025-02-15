@@ -15,7 +15,7 @@
           <div v-for="plant in plants" :key="plant.id" class="plant-card">
             <img :src="'/uploads/' + plant.photo" alt="plant.name">
             <h3>{{ plant.name }}</h3>
-            <p><strong>Birth Date:</strong> {{ plant.start_date }}</p>
+            <p><strong>Birth Date</strong> {{ plant.start_date }}</p>
             <p><strong>Soil Moisture Content:</strong> {{ plant.soil_moisture_content }}%</p>
             <p><strong>Humidity Content:</strong> {{ plant.humidity_content }}%</p>
           </div>
@@ -35,10 +35,10 @@
         emoji:  new Date().getHours() < 12 ? "🌄" :
                 new Date().getHours() < 18 ? "🌞" :
                 "🌙",
+        firstName: sessionStorage.getItem("firstName") || "Guest",
         // This will store the fetched plants data
       };
-    },
-    props: ["firstName"], // Receive firstName from the parent component (login)
+    }, // Receive firstName from the parent component (login)
     methods: {
       handleLogout() {
         sessionStorage.removeItem("user_id"); // Example of clearing session storage

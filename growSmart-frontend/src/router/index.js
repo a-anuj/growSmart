@@ -3,6 +3,7 @@ import RegisterView from '/home/anuj/Desktop/THIRAN/growSmart/growSmart-frontend
 import LandingView from '/src/components/Landing.vue'
 import LoginView from '/src/components/Login.vue'
 import PlantDashboard from '/src/components/PlantDashboard.vue'
+import AddPlantView from '/src/components/AddPlant.vue'
 
 const routes = [
     {
@@ -21,10 +22,15 @@ const routes = [
         component:LoginView
     },
     {
-        path:'/plant-dashboard  ',
+        path:'/plant-dashboard',
         name:'PlantDashboard',
         component:PlantDashboard,
-        props: route => ({ firstName: route.query.firstName })
+        props: route => ({ firstName: route.query.firstName }),
+    },
+    {
+        path:'/add-plant',
+        name:'AddPlant',
+        component:AddPlantView
     },
 ]
 

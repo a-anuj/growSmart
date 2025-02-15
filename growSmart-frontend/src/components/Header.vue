@@ -1,13 +1,19 @@
 <template>
     <nav class="navbar">
-        <img class="logo" :src="logoIm" alt="">
+        <router-link to="/"><img class="logo" :src="logoIm" alt=""></router-link>
         <ul class="navitems">
             <li class="nav-item">Features</li>
             <li class="nav-item">Community</li>
             <li class="nav-item">Learning Hub</li>
             <li class="nav-item">About Us</li>
             <li class="nav-item">Contact</li>
-        </ul>
+            <router-link v-if="showAddPlant" to="/add-plant">
+                <li class="nav-item">Add Plant</li>
+            </router-link>
+            <router-link v-if="showDashboard" to="/plant-dashboard">
+                <li class="nav-item">View Plants</li>
+            </router-link>
+        </ul>   
     </nav>
 </template>
 
@@ -17,6 +23,14 @@ export default{
     data(){
         return{
             logoIm:logoimage
+        }
+    },
+    computed:{
+        showAddPlant(){
+            return this.$route.name === "PlantDashboard"; // Show Add Plant only on dashboard
+        },
+        showDashboard(){
+            return this.$route.name === "AddPlant";
         }
     }
 }
@@ -77,6 +91,8 @@ export default{
 .nav-item {
   cursor: pointer;
   font-size: 16px;
+  text-decoration: none;
+  color: black;
   font-family: "Poppins", serif;
   font-optical-sizing: auto;
   font-weight: Black (100);

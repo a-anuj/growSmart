@@ -17,17 +17,18 @@
                     <label class="name">Plant Name</label>
                     <input class="firstname" type="text" required v-model="name" placeholder="Carrot" id="firstname">
                     
-                    <label class="email">Today's Date</label>
-                    <input class="emailfield" type="date" required v-model="startDate" placeholder="abc@gmail.com" id="email">
-                    
                     <label class="password">Soil Moisture Content</label>
                     <input class="passwordfield" type="text" required v-model="soilMoisture" placeholder="Testing purpose only" id="password">
                     
                     <label class="password">Humidity Content</label>
                     <input class="passwordfield" type="text" required v-model="humidityContent" placeholder="Testing purpose only" id="password">
-                    
+
+                    <!-- Inside your form, add an input for image upload -->
+                    <label class="password">Plant Image</label>
+                    <input class="imageupload" type="file" @change="handleImageUpload" accept="image/*" />
+
+
                     <button type="submit" class="register-btn">Add</button>
-                    
                 </form>
             </div>
         </div>
@@ -42,14 +43,15 @@ import image4 from '/src/assets/images/photo3.jpeg'
 
 export default {
     data() {
-        return {
-            images: [image1, image2, image3, image4],
-            currentIndex: 0,
-            name:"",
-            startDate:"",
-            soilMoisture:"",
-            humidityContent:"",
-        };
+    return {
+        images: [image1, image2, image3, image4],
+        currentIndex: 0,
+        name: "",
+        soilMoisture: "",
+        humidityContent: "",
+        userId: 9,  // Replace with the actual user ID, can be fetched from user authentication
+        selectedImage: null, // This will hold the selected image file
+    };  
     },
     computed: {
         currentImage() {
@@ -59,48 +61,48 @@ export default {
     mounted() {
         setInterval(this.nextImage, 3000); // Change image every 3 seconds
     },
-    methods: {
-        nextImage() {
-            this.currentIndex = (this.currentIndex + 1) % this.images.length;
-        },
-        async handleSubmit() {
-            const formData = {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.email,
-                password: this.password,
-            };
+methods: {
+    nextImage() {
+        this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    },
+    handleImageUpload(event) {
+        this.selectedImage = event.target.files[0]; // Store the selected image file
+    },
+    async handleSubmit() {
+        const formData = new FormData();
+        formData.append('name', this.name);
+        formData.append('startDate', new Date().toUTCString().split(' GMT')[0]); // Current date in YYYY-MM-DD format
+        formData.append('soilMoisture', this.soilMoisture);
+        formData.append('humidityContent', this.humidityContent);
+        formData.append('userId', this.userId);
 
-    try {
-        const response = await fetch("http://127.0.0.1:5000/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
-        });
-
-        const result = await response.json();
-        console.log(result.message); // Debugging message
-
-        if (response.ok) {
-            alert("Registration successful! Redirecting to login...");
-            this.$router.push("/login"); // Redirect to login page
-        } else {
-            alert(result.message); // Show error message if registration fails
+        // Append the image file if selected
+        if (this.selectedImage) {
+            formData.append('image', this.selectedImage); // Attach image file
         }
 
-    } catch (error) {
-        console.error("Error submitting form:", error);
-        alert("Something went wrong. Please try again.");
-    }
+        try {
+            const response = await fetch("http://127.0.0.1:5000/add_plant", {
+                method: "POST",
+                body: formData, // Use FormData for sending file along with other fields
+            });
+
+            const result = await response.json();
+            console.log(result.message); // Debugging message
+
+            if (response.ok) {
+                alert("Plant added successfully!");
+                this.resetForm();  // Optionally reset the form after submission
+            } else {
+                alert(result.message); // Show error message if adding plant fails
+            }
+
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    },
 }
 
-    },
-    resetFunction(){
-        this.name="",
-        this.startDate="",
-        this.soilMoisture="",
-        this.humidityContent=""
-    }
 };
 </script>
 
@@ -203,6 +205,13 @@ export default {
     display: block;
     margin-bottom: 20px;
 
+}
+
+.imageupload{
+    padding: 10px 15px;
+    font-size: 16px;
+    width: 350px;
+    display: block;
 }
 
 .register-btn {

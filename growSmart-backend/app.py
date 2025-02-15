@@ -1,13 +1,28 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory, Response
+from flask import Flask, request, jsonify, send_from_directory, Response, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__, static_folder="../growSmart-frontend/dist")
+
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
 
 # ✅ PostgreSQL Database Configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:anuj2006@localhost/user_growSmart"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Set secret key for sessions (used to secure the session cookies)
+app.secret_key = os.urandom(24)
 
 db = SQLAlchemy(app)
 
@@ -18,6 +33,19 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255))  # NEW
+
+# ✅ Plant Model
+class Plant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    start_date = db.Column(db.String, nullable=False)
+    soil_moisture = db.Column(db.Float, nullable=False)
+    humidity_content = db.Column(db.Float, nullable=False)
+    image_path = db.Column(db.String(255), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relationship to User table
+    user = db.relationship('User', backref=db.backref('plants', lazy=True))
 
 # ✅ Create Database Tables (Run Once)
 with app.app_context():
@@ -80,6 +108,9 @@ def handle_login():
     if not user or not check_password_hash(user.password, password):
         return jsonify({"message": "Invalid credentials!"}), 401
 
+    # Store user id in session (or use a token-based approach if preferred)
+    session['user_id'] = user.id
+
     return jsonify({
         "message": "Login successful!",
         "user": {
@@ -89,6 +120,84 @@ def handle_login():
             "email": user.email,
         },
     }), 200
+
+# ✅ Fetch Plants of Logged-in User
+@app.route("/api/plants", methods=["GET"])
+def get_plants():
+    # Check if the user is logged in
+    if 'user_id' not in session:
+        return jsonify({"message": "User not logged in!"}), 401
+
+    user_id = session['user_id']
+
+    # Fetch the plants associated with the logged-in user
+    plants = Plant.query.filter_by(user_id=user_id).all()
+
+    # Convert plants to a list of dictionaries and return them as JSON
+    plants_data = [
+        {
+            "id": plant.id,
+            "name": plant.name,
+            "start_date": plant.start_date,
+            "soil_moisture_content": plant.soil_moisture,
+            "humidity_content": plant.humidity_content,
+            "photo": plant.image_path
+        }
+        for plant in plants
+    ]
+    return jsonify(plants_data)
+
+from flask import session, jsonify, request
+from datetime import datetime
+
+@app.route('/add_plant', methods=['POST'])
+def add_plant():
+    # Check if user is logged in
+    user_id = session.get('user_id')  # Get user ID from the session
+    if not user_id:
+        return jsonify({"message": "User ID is required!"}), 400
+
+    data = request.form  # Using `form` to handle FormData
+    name = data.get('name')
+    start_date = data.get('startDate')
+    soil_moisture = data.get('soilMoisture')
+    humidity_content = data.get('humidityContent')
+
+    if not all([name, start_date, soil_moisture, humidity_content]):
+        return jsonify({"message": "All fields are required!"}), 400
+
+    # Handle image file upload
+    image = request.files.get('image')  # Get the image file from the form
+    image_path = None
+    if image and allowed_file(image.filename):
+        filename = secure_filename(image.filename)  # Secure the filename
+        image_path = filename  # Save only the filename or relative path
+        image.save(image_path)  # Save the image to the upload folder
+
+    # Save plant info to database (image_path is stored as the path in the database)
+    # (Assuming you have your database models set up correctly here)
+    new_plant = Plant(
+        name=name,
+        start_date=start_date,
+        soil_moisture=soil_moisture,
+        humidity_content=humidity_content,
+        user_id=user_id,
+        image_path=image_path  # Store the image path in the database
+    )
+
+    try:
+        db.session.add(new_plant)
+        db.session.commit()
+        return jsonify({"message": "Plant added successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "Error adding plant!", "error": str(e)}), 500
+    
+    
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(os.path.join(app.root_path, 'uploads'), filename)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

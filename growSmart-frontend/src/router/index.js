@@ -4,6 +4,8 @@ import LandingView from '/src/components/Landing.vue'
 import LoginView from '/src/components/Login.vue'
 import PlantDashboard from '/src/components/PlantDashboard.vue'
 import AddPlantView from '/src/components/AddPlant.vue'
+import CommunityView from '../components/Community.vue';
+import AddPostView from '../components/AddPost.vue';
 
 const routes = [
     {
@@ -32,6 +34,17 @@ const routes = [
         name:'AddPlant',
         component:AddPlantView
     },
+    {
+        path:'/community',
+        name:'community',
+        component:CommunityView
+    },
+    {
+        path:'/add-post',
+        name:'addpost',
+        component:AddPostView
+
+    }
 ]
 
 const router = createRouter({

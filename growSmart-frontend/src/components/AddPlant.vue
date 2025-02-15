@@ -71,6 +71,7 @@ methods: {
     async handleSubmit() {
         const formData = new FormData();
         formData.append('name', this.name);
+        formData.append('startDate',new Date().toUTCString().split(' GMT')[0])
         formData.append('startDate', new Date().toUTCString().split(' GMT')[0]); // Current date in YYYY-MM-DD format
         formData.append('soilMoisture', this.soilMoisture);
         formData.append('humidityContent', this.humidityContent);

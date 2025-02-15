@@ -3,7 +3,9 @@
         <router-link to="/"><img class="logo" :src="logoIm" alt=""></router-link>
         <ul class="navitems">
             <li class="nav-item">Features</li>
-            <li class="nav-item">Community</li>
+            <router-link v-if="showCommunity" to="/community">
+                <li class="nav-item">Community</li>
+            </router-link>
             <li class="nav-item">Learning Hub</li>
             <li class="nav-item">About Us</li>
             <li class="nav-item">Contact</li>
@@ -31,6 +33,9 @@ export default{
         },
         showDashboard(){
             return this.$route.name === "AddPlant";
+        },
+        showCommunity(){
+            return this.$route.name === "PlantDashboard";
         }
     }
 }
@@ -106,7 +111,7 @@ export default{
 .nav-item:hover {
   padding: 8px;
   background: #218838; /* Darker green */
-transform: scale(1.05); /* Slight pop effect */
+  transform: scale(1.05); /* Slight pop effect */
   transition: all 0.3s ease-in-out;
   color: white;
 }

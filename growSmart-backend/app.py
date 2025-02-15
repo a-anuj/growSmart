@@ -3,9 +3,12 @@ from flask import Flask, request, jsonify, send_from_directory, Response, sessio
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from flask_cors import CORS
 
 
 app = Flask(__name__, static_folder="../growSmart-frontend/dist")
+
+app.config["SESSION_COOKIE_SECURE"] = False  # Set True if using HTTPS
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -47,9 +50,21 @@ class Plant(db.Model):
     # Relationship to User table
     user = db.relationship('User', backref=db.backref('plants', lazy=True))
 
+# ✅ ForumPost Model
+class ForumPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    username = db.Column(db.String(100), nullable=False)  # Store username
+    title = db.Column(db.Text,nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=db.func.now())
+
+    user = db.relationship('User', backref=db.backref('forum_posts', lazy=True))
+
 # ✅ Create Database Tables (Run Once)
 with app.app_context():
     db.create_all()
+
 
 # ✅ Serve Vue App
 @app.route("/")
@@ -199,5 +214,58 @@ def uploaded_file(filename):
     return send_from_directory(os.path.join(app.root_path, 'uploads'), filename)
 
 
+@app.route("/posts", methods=["GET"])
+def get_community_posts():
+    posts = ForumPost.query.order_by(ForumPost.timestamp.desc()).all()
+    posts_data = [
+        {
+            "id": post.id,
+            "username": post.username,
+            "title": post.title,  # Include title in response
+            "content": post.content,
+            "timestamp": post.timestamp.strftime("%a, %d %b %Y %H:%M:%S")
+        }
+        for post in posts
+    ]
+
+    return jsonify(posts_data), 200
+
+
+
+@app.route("/post", methods=["POST"])
+def add_community_post():
+    # Check if user is logged in
+    user_id = session.get('user_id')  # Get user ID from the session
+    if not user_id:
+        return jsonify({"message": "User ID is required!"}), 400
+
+    data = request.form  # Using `form` to handle FormData
+    title = data.get('title')
+    content = data.get('content')
+    timestamp = data.get('timestamp')
+    user = User.query.filter_by(id=user_id).first()
+    new_post = ForumPost(
+        title=title,
+        user_id=user_id,
+        content=content,
+        username=user.first_name,
+        timestamp=timestamp
+    )
+
+    try:
+        db.session.add(new_post)
+        db.session.commit()
+        return jsonify({"message": "Post added successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "Error adding Post!", "error": str(e)}), 500
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+

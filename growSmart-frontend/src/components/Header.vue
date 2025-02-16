@@ -2,19 +2,43 @@
     <nav class="navbar">
         <router-link to="/"><img class="logo" :src="logoIm" alt=""></router-link>
         <ul class="navitems">
-            <li class="nav-item">Features</li>
-            <router-link v-if="showCommunity" to="/community">
-                <li class="nav-item">Community</li>
+
+            <router-link to="/plant-dashboard">
+                <li class="nav-item">Home</li>
             </router-link>
-            <li class="nav-item">Learning Hub</li>
-            <li class="nav-item">About Us</li>
-            <li class="nav-item">Contact</li>
-            <router-link v-if="showAddPlant" to="/add-plant">
-                <li class="nav-item">Add Plant</li>
+
+            <router-link v-if="showAboutUs" to="/">
+                <li class="nav-item">About Us</li>
             </router-link>
+
+            <router-link v-if="showContact" to="/">
+                <li class="nav-item">Contact</li>
+            </router-link>
+
+            <router-link v-if="showLogin" to="/login">
+                <li class="nav-item">Login</li>
+            </router-link>
+
+            <router-link v-if="showRegister" to="/register">
+                <li class="nav-item">Register</li>
+            </router-link>
+
             <router-link v-if="showDashboard" to="/plant-dashboard">
                 <li class="nav-item">View Plants</li>
             </router-link>
+            
+            <router-link v-if="showAddPlant" to="/add-plant">
+                <li class="nav-item">Add Plant</li>
+            </router-link>
+
+            <router-link v-if="showCommunity" to="/community">
+                <li class="nav-item">Community</li>
+            </router-link>
+
+            <router-link v-if="showLogout" to="/" @click="handleLogout">
+                <li class="nav-itemb">Logout</li>
+            </router-link>
+            
         </ul>   
     </nav>
 </template>
@@ -27,6 +51,13 @@ export default{
             logoIm:logoimage
         }
     },
+    methods:{
+        handleLogout() {
+        sessionStorage.removeItem("user_id"); // Example of clearing session storage
+        this.$router.push({ name: "login" }); // Redirect to login on logout
+        alert("Logged out successfully!!") 
+      }
+    },
     computed:{
         showAddPlant(){
             return this.$route.name === "PlantDashboard"; // Show Add Plant only on dashboard
@@ -35,7 +66,22 @@ export default{
             return this.$route.name === "AddPlant" || this.$route.name === "community";
         },
         showCommunity(){
-            return this.$route.name === "PlantDashboard";
+            return this.$route.name === "PlantDashboard" || this.$route.name === "AddPlant";
+        },
+        showAboutUs(){
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login" || this.$route.name === "AddPlant" || this.$route.name === "PlantDashboard" || this.$route.name === "community";
+        },
+        showContact(){
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login";
+        },
+        showLogin(){
+            return this.$route.name === "home" || this.$route.name === "register";
+        },
+        showRegister(){
+            return this.$route.name === "home" || this.$route.name === "login";
+        },
+        showLogout(){
+            return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register";
         }
     }
 }
@@ -77,7 +123,7 @@ export default{
 .logo {
   font-size: 24px;
   font-weight: bold;
-  margin-right: 500px;
+  margin-right: 600px;
   margin-left: 80px;
   height: 50px;
 
@@ -90,6 +136,11 @@ export default{
   gap: 30px; /* Space between items */
   margin: 0;
   padding: 0;
+}
+
+.navitems a{
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Individual nav items */
@@ -105,8 +156,25 @@ export default{
   padding: 8px;
   transition:500ms;
   border-radius: 10px;
-
 }
+
+.nav-itemb{
+    font-family: "Poppins", serif;
+    font-optical-sizing: auto;
+    font-weight: Black (100);
+    font-size: 14px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+router-link{
+    text-decoration: none;
+}
+
 
 .nav-item:hover {
   padding: 8px;

@@ -6,9 +6,6 @@
             <h1 class="heading">{{ greeting }}, {{ firstName }}! {{ emoji }}</h1>
             <p class="subheading">Your plants are thriving! </p>
           </div>
-          <div class="logout">
-            <button @click="handleLogout">Logout</button>
-          </div>
         </div>
         
         <section class="plants">
@@ -43,6 +40,7 @@
       handleLogout() {
         sessionStorage.removeItem("user_id"); // Example of clearing session storage
         this.$router.push({ name: "login" }); // Redirect to login on logout
+        alert("Logged out successfully!!") 
       },
       fetchPlants() {
         const userId = sessionStorage.getItem('user_id'); // Get user ID from session storage

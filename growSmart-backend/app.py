@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
+from flask_mail import Mail,Message
 
 
 app = Flask(__name__, static_folder="../growSmart-frontend/dist")
@@ -14,6 +15,16 @@ UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Use your email provider's SMTP server
+app.config['MAIL_PORT'] = 587  # Port for TLS
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'emailsfromapp@gmail.com'  # Replace with your email
+app.config['MAIL_PASSWORD'] = 'jjrn meur idhg mdws'  # Replace with your email password
+app.config['MAIL_DEFAULT_SENDER'] = 'emailsfromapp@gmail.com'
+
+mail = Mail(app)
 
 
 
@@ -262,7 +273,37 @@ def add_community_post():
 
 
 
+@app.route('/contact', methods=['POST'])
+def contact():
+    try:
+        data = request.json
+        name = data.get('name')
+        email = data.get('email')
+        subject = data.get('subject')
+        message = data.get('message')
 
+        if not name or not email or not subject or not message:
+            return jsonify({"error": "All fields are required"}), 400
+
+        # Email content
+        email_body = f"""
+        Name: {name}
+        Email: {email}
+        Subject: {subject}
+        
+        Message:
+        {message}
+        """
+
+        msg = Message(subject=f"New Contact Form Submission: {subject}",
+                      recipients=['emailsfromapp@gmail.com'],  # Change this to your email
+                      body=email_body)
+
+        mail.send(msg)
+        return jsonify({"success": "Message sent successfully!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

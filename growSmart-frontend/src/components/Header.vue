@@ -7,7 +7,7 @@
                 <li class="nav-item">Home</li>
             </router-link>
 
-            <router-link v-if="showAboutUs" to="/">
+            <router-link v-if="showAboutUs" to="/about-us">
                 <li class="nav-item">About Us</li>
             </router-link>
 
@@ -72,16 +72,16 @@ export default{
             return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login" || this.$route.name === "AddPlant" || this.$route.name === "PlantDashboard" || this.$route.name === "community";
         },
         showContact(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login";
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login"  || this.$route.name=== "aboutus";;
         },
         showLogin(){
-            return this.$route.name === "home" || this.$route.name === "register";
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name=== "aboutus";
         },
         showRegister(){
-            return this.$route.name === "home" || this.$route.name === "login";
+            return this.$route.name === "home" || this.$route.name === "login" || this.$route.name=== "aboutus";;
         },
         showLogout(){
-            return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register";
+            return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register" && this.$route.name !== "aboutus" ;
         }
     }
 }

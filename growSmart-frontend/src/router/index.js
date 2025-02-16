@@ -7,7 +7,7 @@ import AddPlantView from '/src/components/AddPlant.vue'
 import CommunityView from '../components/Community.vue';
 import AddPostView from '../components/AddPost.vue';
 import AboutUsView from '../components/AboutUs.vue';
-
+import ContactUsView from '../components/ContactUs.vue';
 const routes = [
     {
         path:'/',
@@ -50,6 +50,11 @@ const routes = [
         path:'/about-us',
         name:'aboutus',
         component:AboutUsView
+    },
+    {
+        path:'/contact-us',
+        name:'contactus',
+        component:ContactUsView
     }
 ]
 

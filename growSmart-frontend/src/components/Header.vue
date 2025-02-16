@@ -11,7 +11,7 @@
                 <li class="nav-item">About Us</li>
             </router-link>
 
-            <router-link v-if="showContact" to="/">
+            <router-link v-if="showContact" to="/contact-us">
                 <li class="nav-item">Contact</li>
             </router-link>
 
@@ -69,19 +69,19 @@ export default{
             return this.$route.name === "PlantDashboard" || this.$route.name === "AddPlant";
         },
         showAboutUs(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login" || this.$route.name === "AddPlant" || this.$route.name === "PlantDashboard" || this.$route.name === "community";
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login" || this.$route.name === "AddPlant" || this.$route.name === "PlantDashboard" || this.$route.name === "community" || this.$route.name=== "contactus";
         },
         showContact(){
             return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login"  || this.$route.name=== "aboutus";;
         },
         showLogin(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name=== "aboutus";
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name=== "aboutus" || this.$route.name=== "contactus" ;
         },
         showRegister(){
-            return this.$route.name === "home" || this.$route.name === "login" || this.$route.name=== "aboutus";;
+            return this.$route.name === "home" || this.$route.name === "login" || this.$route.name=== "aboutus" || this.$route.name=== "contactus";
         },
         showLogout(){
-            return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register" && this.$route.name !== "aboutus" ;
+            return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register" && this.$route.name !== "aboutus" && this.$route.name !== "contactus";
         }
     }
 }

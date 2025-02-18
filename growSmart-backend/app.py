@@ -61,6 +61,7 @@ class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     start_date = db.Column(db.String, nullable=False)
+    sci_name = db.Column(db.String, nullable=False)
     soil_moisture = db.Column(db.Float, nullable=False)
     humidity_content = db.Column(db.Float, nullable=False)
     image_path = db.Column(db.String(255), nullable=True)
@@ -175,7 +176,8 @@ def get_plants():
             "start_date": plant.start_date,
             "soil_moisture_content": plant.soil_moisture,
             "humidity_content": plant.humidity_content,
-            "photo": plant.image_path
+            "photo": plant.image_path,
+            "scientific_name":plant.sci_name
         }
         for plant in plants
     ]
@@ -199,6 +201,7 @@ def add_plant():
     start_date = data.get('startDate')
     soil_moisture = data.get('soilMoisture')
     humidity_content = data.get('humidityContent')
+    scientific_name = data.get('scientificName')
 
     if not all([name, start_date, soil_moisture, humidity_content]):
         return jsonify({"message": "All fields are required!"}), 400
@@ -213,6 +216,7 @@ def add_plant():
         image.save(image_path)  # Save file
         image_filename = filename  # Only store filename in DB
 
+
     # Save to database
     new_plant = Plant(
         name=name,
@@ -220,7 +224,8 @@ def add_plant():
         soil_moisture=soil_moisture,
         humidity_content=humidity_content,
         user_id=user_id,
-        image_path=image_filename  # Store only the filename
+        image_path=image_filename,  # Store only the filename
+        sci_name=scientific_name
     )
 
     try:

@@ -5,14 +5,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from flask_mail import Mail,Message
-
+import requests
+from flask_cors import CORS
 
 app = Flask(__name__, static_folder="../growSmart-frontend/dist")
-
+CORS(app)
 app.config["SESSION_COOKIE_SECURE"] = False  # Set True if using HTTPS
 
-UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
+
+WEATHER_API_KEY = "1a5140b6e50a42ca9db105641251802"
+WEATHER_API_URL = "http://api.weatherapi.com/v1/current.json"
+
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure folder exists
+
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -176,14 +183,17 @@ def get_plants():
 from flask import session, jsonify, request
 from datetime import datetime
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/add_plant', methods=['POST'])
 def add_plant():
     # Check if user is logged in
-    user_id = session.get('user_id')  # Get user ID from the session
+    user_id = session.get('user_id')
     if not user_id:
         return jsonify({"message": "User ID is required!"}), 400
 
-    data = request.form  # Using `form` to handle FormData
+    data = request.form
     name = data.get('name')
     start_date = data.get('startDate')
     soil_moisture = data.get('soilMoisture')
@@ -192,23 +202,24 @@ def add_plant():
     if not all([name, start_date, soil_moisture, humidity_content]):
         return jsonify({"message": "All fields are required!"}), 400
 
-    # Handle image file upload
-    image = request.files.get('image')  # Get the image file from the form
-    image_path = None
-    if image and allowed_file(image.filename):
-        filename = secure_filename(image.filename)  # Secure the filename
-        image_path = filename  # Save only the filename or relative path
-        image.save(image_path)  # Save the image to the upload folder
+    # Handle image upload
+    image = request.files.get('image')
+    image_filename = None
 
-    # Save plant info to database (image_path is stored as the path in the database)
-    # (Assuming you have your database models set up correctly here)
+    if image and allowed_file(image.filename):
+        filename = secure_filename(image.filename)
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)  # Save inside uploads/
+        image.save(image_path)  # Save file
+        image_filename = filename  # Only store filename in DB
+
+    # Save to database
     new_plant = Plant(
         name=name,
         start_date=start_date,
         soil_moisture=soil_moisture,
         humidity_content=humidity_content,
         user_id=user_id,
-        image_path=image_path  # Store the image path in the database
+        image_path=image_filename  # Store only the filename
     )
 
     try:
@@ -218,11 +229,15 @@ def add_plant():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error adding plant!", "error": str(e)}), 500
-    
+
+# Route to serve uploaded images
+@app.route('/uploads/<filename>')
+def serve_uploads(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(os.path.join(app.root_path, 'uploads'), filename)
+    return send_from_directory('uploads', filename)
 
 
 @app.route("/posts", methods=["GET"])
@@ -304,6 +319,25 @@ def contact():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+# Example endpoint to get temperature and humidity data
+
+@app.route('/weather', methods=['GET'])
+def get_weather():
+    city = request.args.get('city', 'Coimbatore')  # Defaults to 'Chennai' if no city is provided
+    url = f"{WEATHER_API_URL}?key={WEATHER_API_KEY}&q={city}"
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return jsonify({
+            "temperature": data["current"]["temp_c"],
+            "humidity": data["current"]["humidity"],
+            "condition": data["current"]["condition"]["text"]
+        })
+    else:
+        return jsonify({"error": "Failed to fetch weather data"}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True)

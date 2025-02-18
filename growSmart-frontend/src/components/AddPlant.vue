@@ -17,7 +17,7 @@
                     <label class="name">Plant Name</label>
                     <input class="firstname" type="text" required v-model="name" placeholder="Carrot" id="firstname">
                     
-                    <label class="password">Soil Moisture Content</label>
+                    <label class="password">Temperature</label>
                     <input class="passwordfield" type="text" required v-model="soilMoisture" placeholder="Testing purpose only" id="password">
                     
                     <label class="password">Humidity Content</label>

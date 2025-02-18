@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_mail import Mail,Message
 import requests
 from flask_cors import CORS
+import base64
 
 app = Flask(__name__, static_folder="../growSmart-frontend/dist")
 CORS(app)
@@ -337,6 +338,62 @@ def get_weather():
         })
     else:
         return jsonify({"error": "Failed to fetch weather data"}), 500
+
+
+
+# Your Plant.id API key
+PLANT_ID_API_KEY = "5P0maoPFCrWcp3So3U3zFJMGCfFZMXnY16yPsCrCQyqDvhXXYX"
+
+@app.route('/identify-plant', methods=['POST'])
+def identify_plant():
+    if 'image' not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+
+    image = request.files['image']
+    image_path = "temp.jpg"
+    image.save(image_path)
+
+    # Convert image to base64
+    with open(image_path, "rb") as img_file:
+        base64_image = base64.b64encode(img_file.read()).decode("utf-8")
+
+    # Remove the saved temp image
+    os.remove(image_path)
+
+    # Prepare request payload
+    payload = {
+        "images": [base64_image],
+        "organs": ["leaf"],
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "Api-Key": PLANT_ID_API_KEY
+    }
+
+    # Send request to Plant.id API
+    try:
+        response = requests.post("https://api.plant.id/v2/identify", json=payload, headers=headers)
+        data = response.json()
+
+        # Extract plant details
+        if "suggestions" in data and len(data["suggestions"]) > 0:
+            plant_info = data["suggestions"][0]["plant_details"]
+            common_name = plant_info.get("common_names", ["Unknown"])[0]
+            scientific_name = plant_info.get("scientific_name", "Unknown")
+            result = {
+                "common_name": common_name,
+                "scientific_name": scientific_name
+            }
+        else:
+            result = {"error": "Could not identify the plant"}
+
+        return jsonify(result)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 
 if __name__ == "__main__":

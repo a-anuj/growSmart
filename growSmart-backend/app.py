@@ -9,14 +9,18 @@ import requests
 from google.cloud import dialogflow_v2 as dialogflow
 from flask_cors import CORS
 import base64
+from dotenv import load_dotenv
+load_dotenv()
+
+
 
 app = Flask(__name__, static_folder="../growSmart-frontend/dist")
 CORS(app)
 app.config["SESSION_COOKIE_SECURE"] = False  # Set True if using HTTPS
 
 
-WEATHER_API_KEY = "1a5140b6e50a42ca9db105641251802"
-WEATHER_API_URL = "http://api.weatherapi.com/v1/current.json"
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+WEATHER_API_URL = os.getenv("WEATHER_API_URL")
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -348,7 +352,7 @@ def get_weather():
 
 
 # Your Plant.id API key
-PLANT_ID_API_KEY = "5P0maoPFCrWcp3So3U3zFJMGCfFZMXnY16yPsCrCQyqDvhXXYX"
+PLANT_ID_API_KEY = os.getenv("PLANT_ID_API_KEY")
 
 @app.route('/identify-plant', methods=['POST'])
 def identify_plant():
@@ -406,15 +410,11 @@ import uuid
 def generate_session_id():
     return str(uuid.uuid4())
 
-session_id = generate_session_id()  # Call this function to generate a session ID
-
-
-
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../growSmart-frontend/growSmartAPI.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
 # Dialogflow project details
-PROJECT_ID = 'growsmart-449113'
-SESSION_ID = session_id
+PROJECT_ID = os.getenv("PROJECT_ID")
+SESSION_ID = generate_session_id()
 
 # Create Dialogflow session client
 session_client = dialogflow.SessionsClient()

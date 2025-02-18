@@ -9,6 +9,7 @@ import AddPostView from '../components/AddPost.vue';
 import AboutUsView from '../components/AboutUs.vue';
 import ContactUsView from '../components/ContactUs.vue';
 import PlantAIView from '../components/PlantAI.vue'
+import ChatBotView from '../components/ChatBot.vue';
 const routes = [
     {
         path:'/',
@@ -61,6 +62,11 @@ const routes = [
         path:'/plant-details',
         name:'plantdetails',
         component:PlantAIView
+    },
+    {
+        path:'/chatbot',
+        name:'chatbot',
+        component:ChatBotView
     }
 ]
 

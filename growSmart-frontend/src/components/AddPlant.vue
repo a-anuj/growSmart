@@ -27,7 +27,6 @@
                     <label class="password">Plant Image</label>
                     <input class="imageupload" type="file" @change="handleImageUpload" accept="image/*" />
 
-
                     <button type="submit" class="register-btn">Add</button>
                 </form>
             </div>
@@ -43,15 +42,16 @@ import image4 from '/src/assets/images/photo3.jpeg'
 
 export default {
     data() {
-    return {
-        images: [image1, image2, image3, image4],
-        currentIndex: 0,
-        name: "",
-        soilMoisture: "",
-        humidityContent: "",
-        userId: 9,  // Replace with the actual user ID, can be fetched from user authentication
-        selectedImage: null, // This will hold the selected image file
-    };  
+        return {
+            images: [image1, image2, image3, image4],
+            currentIndex: 0,
+            name: "",
+            soilMoisture: "",
+            humidityContent: "",
+            userId: 9,  // Replace with the actual user ID, can be fetched from user authentication
+            selectedImage: null, // This will hold the selected image file
+            scientificName: "", // To store the scientific name of the plant
+        };  
     },
     computed: {
         currentImage() {
@@ -61,50 +61,79 @@ export default {
     mounted() {
         setInterval(this.nextImage, 3000); // Change image every 3 seconds
     },
-methods: {
-    nextImage() {
-        this.currentIndex = (this.currentIndex + 1) % this.images.length;
-    },
-    handleImageUpload(event) {
-        this.selectedImage = event.target.files[0]; // Store the selected image file
-    },
-    async handleSubmit() {
-        const formData = new FormData();
-        formData.append('name', this.name);
-        formData.append('startDate',new Date().toUTCString().split(' GMT')[0])
-        formData.append('startDate', new Date().toUTCString().split(' GMT')[0]); // Current date in YYYY-MM-DD format
-        formData.append('soilMoisture', this.soilMoisture);
-        formData.append('humidityContent', this.humidityContent);
-        formData.append('userId', this.userId);
+    methods: {
+        nextImage() {
+            this.currentIndex = (this.currentIndex + 1) % this.images.length;
+        },
+        handleImageUpload(event) {
+            this.selectedImage = event.target.files[0]; // Store the selected image file
+        },
+        async identifyPlant() {
+            if (this.selectedImage) {
+                const formData = new FormData();
+                formData.append('image', this.selectedImage); // Attach image file
 
-        // Append the image file if selected
-        if (this.selectedImage) {
-            formData.append('image', this.selectedImage); // Attach image file
-        }
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/identify-plant", {
+                        method: "POST",
+                        body: formData, // Send image as FormData
+                    });
 
-        try {
-            const response = await fetch("http://127.0.0.1:5000/add_plant", {
-                method: "POST",
-                body: formData, // Use FormData for sending file along with other fields
-            });
+                    const result = await response.json();
+                    if (response.ok && result.scientific_name) {
+                        this.scientificName = result.scientific_name; // Extract scientific name from response
+                        sessionStorage.setItem('scientificName', this.scientificName);  // Store it in sessionStorage
+                    } else {
+                        alert('Plant not identified');
+                    }
 
-            const result = await response.json();
-            console.log(result.message); // Debugging message
-
-            if (response.ok) {
-                alert("Plant added successfully!");
-                this.$router.push({name:"PlantDashboard"})
-                this.resetForm();  // Optionally reset the form after submission
-            } else {
-                alert(result.message); // Show error message if adding plant fails
+                } catch (error) {
+                    console.error('Error identifying plant:', error);
+                    alert('Error identifying plant');
+                }
             }
+        },
+        async handleSubmit() {
+            await this.identifyPlant(); // Call the identifyPlant method to get the scientific name first
 
-        } catch (error) {
-            console.error("Error submitting form:", error);
-        }
+            // If scientific name was retrieved, submit the form
+            if (this.scientificName) {
+                const formData = new FormData();
+                formData.append('name', this.name);
+                formData.append('startDate', new Date().toUTCString().split(' GMT')[0]); // Current date
+                formData.append('soilMoisture', this.soilMoisture);
+                formData.append('humidityContent', this.humidityContent);
+                formData.append('userId', this.userId);
+                formData.append('scientificName', this.scientificName);
+
+                if (this.selectedImage) {
+                    formData.append('image', this.selectedImage); // Attach image file
+                }
+
+
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/add_plant", {
+                        method: "POST",
+                        body: formData, // Use FormData for sending file along with other fields
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert("Plant added successfully!");
+                        this.$router.push({ name: "PlantDashboard" });
+                        this.resetForm(); // Optionally reset the form after submission
+                    } else {
+                        alert(result.message); // Show error message if adding plant fails
+                    }
+
+                } catch (error) {
+                    console.error("Error submitting form:", error);
+                }
+            } else {
+                alert('Please upload a valid plant image.');
+            }
+        },
     },
-}
-
 };
 </script>
 

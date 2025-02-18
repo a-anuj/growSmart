@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from flask_mail import Mail,Message
 import requests
+from google.cloud import dialogflow_v2 as dialogflow
 from flask_cors import CORS
 import base64
 
@@ -398,6 +399,44 @@ def identify_plant():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+import uuid
+
+# Generate a unique session ID using UUID
+def generate_session_id():
+    return str(uuid.uuid4())
+
+session_id = generate_session_id()  # Call this function to generate a session ID
+
+
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../growSmart-frontend/growSmartAPI.json"
+
+# Dialogflow project details
+PROJECT_ID = 'growsmart-449113'
+SESSION_ID = session_id
+
+# Create Dialogflow session client
+session_client = dialogflow.SessionsClient()
+
+@app.route('/dialogflow-query', methods=['POST'])
+def dialogflow_query():
+    user_message = request.json.get('text')
+
+    # Create session path with the updated method
+    session = session_client.session_path(PROJECT_ID, SESSION_ID)
+
+    text_input = dialogflow.TextInput(text=user_message, language_code='en')
+    query_input = dialogflow.QueryInput(text=text_input)
+
+    try:
+        response = session_client.detect_intent(request={"session": session, "query_input": query_input})
+        result = response.query_result
+        return jsonify({
+            'fulfillmentText': result.fulfillment_text
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 

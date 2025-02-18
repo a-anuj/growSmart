@@ -1,174 +1,214 @@
 <template>
     <div class="container">
-      <h1 class="title">Plant AI Dashboard</h1>
+      <h1 class="title"><u>Plant Analysis</u></h1>
   
-      <!-- First Table: User-Entered Plant Data -->
-      <div class="table-container">
-        <h2>Entered Values</h2>
-        <table>
-          <tr>
-            <th>Parameter</th>
-            <th>Value</th>
-          </tr>
-          <tr>
-            <td><strong>Temperature</strong></td>
-            <td>{{ plant.soil_moisture_content ? plant.soil_moisture_content + '°C' : 'Loading...' }}</td>
-          </tr>
-          <tr>
-            <td><strong>Humidity</strong></td>
-            <td>{{ plant.humidity_content ? plant.humidity_content + '%' : 'Loading...' }}</td>
-          </tr>
-        </table>
-      </div>
+      <div class="content">
+        <!-- Left Section: Tables -->
+        <div class="tables-container">
+          <!-- First Table: User-Entered Plant Data -->
+          <div class="table-container">
+            <h2>Entered Values for {{ plant.name }}</h2>
+            <table>
+              <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+              </tr>
+              <tr>
+                <td><strong>Temperature</strong></td>
+                <td>{{ plant.soil_moisture_content ? plant.soil_moisture_content + '°C' : 'Loading...' }}</td>
+              </tr>
+              <tr>
+                <td><strong>Humidity</strong></td>
+                <td>{{ plant.humidity_content ? plant.humidity_content + '%' : 'Loading...' }}</td>
+              </tr>
+            </table>
+          </div>
   
-      <!-- Second Table: Expected Weather Values -->
-      <div class="table-container">
-        <h2>Expected Values</h2>
-        <table>
-          <tr>
-            <th>Parameter</th>
-            <th>Value</th>
-          </tr>
-          <tr>
-            <td><strong>Temperature</strong></td>
-            <td>{{ temperature ? temperature + '°C' : 'Loading...' }}</td>
-          </tr>
-          <tr>
-            <td><strong>Humidity</strong></td>
-            <td>{{ humidity ? humidity + '%' : 'Loading...' }}</td>
-          </tr>
-        </table>
-      </div>
+          <!-- Second Table: Expected Weather Values -->
+          <div class="table-container">
+            <h2>Expected Values for {{ plant.name }}</h2>
+            <table>
+              <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+              </tr>
+              <tr>
+                <td><strong>Temperature</strong></td>
+                <td>{{ temperature ? temperature + '°C' : 'Loading...' }}</td>
+              </tr>
+              <tr>
+                <td><strong>Humidity</strong></td>
+                <td>{{ humidity ? humidity + '%' : 'Loading...' }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
   
-      <!-- Recommendation Section -->
-      <div v-if="recommendation" class="recommendation-container">
-        <h2>Recommendations</h2>
-        <p>{{ recommendation }}</p>
+        <!-- Right Section: Recommendation -->
+        <div v-if="recommendation" class="recommendation-container">
+          <h2>Recommendations</h2>
+          <p>{{ recommendation }}</p>
+        </div>
       </div>
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
-    data() {
-      return {
-        plant: this.$route.query, // Get plant data from query params
-        temperature: null,
-        humidity: null,
-        recommendation: "", // Holds recommendation message
-      };
-    },
-    methods: {
-      async fetchWeatherData() {
-        try {
-          const response = await fetch("http://localhost:5000/weather"); // Adjust URL if needed
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-  
-          console.log("Weather Data:", data);
-  
-          if (data.temperature && data.humidity) {
-            this.temperature = data.temperature;
-            this.humidity = data.humidity;
-            this.generateRecommendation();
-          } else {
-            console.error("Missing data in the response:", data);
-          }
-        } catch (error) {
-          console.error("Error fetching weather data:", error);
+<script>
+export default {
+  data() {
+    return {
+      plant: this.$route.query, // Get plant data from query params
+      temperature: null,
+      humidity: null,
+      recommendation: "", // Holds recommendation message
+    };
+  },
+  methods: {
+    async fetchWeatherData() {
+      try {
+        const response = await fetch("http://localhost:5000/weather"); // Adjust URL if needed
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-      },
-      generateRecommendation() {
-        if (this.plant.soil_moisture_content && this.temperature && this.plant.humidity_content && this.humidity) {
-          const actualTemp = parseFloat(this.plant.soil_moisture_content);
-          const expectedTemp = parseFloat(this.temperature);
-          const actualHumidity = parseFloat(this.plant.humidity_content);
-          const expectedHumidity = parseFloat(this.humidity);
-  
-          let recommendations = [];
-  
-          if (actualTemp < expectedTemp) {
-            recommendations.push(`The actual temperature (${actualTemp}°C) is lower than the expected temperature (${expectedTemp}°C). Consider using a greenhouse setup, adjusting lighting, or placing the plant in a warmer spot.`);
-          }
-  
-          if (actualHumidity < expectedHumidity) {
-            recommendations.push(`The actual humidity (${actualHumidity}%) is lower than the expected humidity (${expectedHumidity}%). Increase humidity by misting the plant, using a humidity tray, or placing a water source nearby.`);
-          }
-  
-          this.recommendation = recommendations.length > 0 ? recommendations.join(" ") : "The environmental conditions are optimal. Keep monitoring for any changes.";
+        const data = await response.json();
+
+        console.log("Weather Data:", data);
+
+        if (data.temperature && data.humidity) {
+          this.temperature = data.temperature;
+          this.humidity = data.humidity;
+          this.generateRecommendation();
+        } else {
+          console.error("Missing data in the response:", data);
         }
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
       }
     },
-    mounted() {
-      this.fetchWeatherData();
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .container {
-    max-width: 800px;
-    margin: 20px auto;
-    text-align: center;
-    font-family: "Poppins", sans-serif;
+    generateRecommendation() {
+        if (this.plant.soil_moisture_content && this.temperature && this.plant.humidity_content && this.humidity) {
+            const actualTemp = parseFloat(this.plant.soil_moisture_content);
+            const expectedTemp = parseFloat(this.temperature);
+            const actualHumidity = parseFloat(this.plant.humidity_content);
+            const expectedHumidity = parseFloat(this.humidity);
+
+            let recommendations = [];
+
+            // Temperature Conditions
+            if (actualTemp < expectedTemp - 5) {
+            recommendations.push(`The actual temperature (${actualTemp}°C) is significantly lower than the expected temperature (${expectedTemp}°C). Consider using heating lamps, insulating the plant area, or moving it to a warmer location.`);
+            } else if (actualTemp < expectedTemp) {
+            recommendations.push(`The actual temperature (${actualTemp}°C) is slightly lower than the expected temperature (${expectedTemp}°C). Use mild heating sources or adjust sunlight exposure.`);
+            } else if (actualTemp > expectedTemp + 5) {
+            recommendations.push(`The actual temperature (${actualTemp}°C) is significantly higher than the expected temperature (${expectedTemp}°C). Ensure proper ventilation, provide shade, and consider watering more frequently.`);
+            } else if (actualTemp > expectedTemp) {
+            recommendations.push(`The actual temperature (${actualTemp}°C) is slightly higher than the expected temperature (${expectedTemp}°C). Monitor for heat stress and adjust watering schedules accordingly.`);
+            }
+
+            // Humidity Conditions
+            if (actualHumidity < expectedHumidity - 10) {
+            recommendations.push(`The actual humidity (${actualHumidity}%) is significantly lower than the expected humidity (${expectedHumidity}%). Use a humidifier, misting, or place the plant near a water source to increase humidity.`);
+            } else if (actualHumidity < expectedHumidity) {
+            recommendations.push(`The actual humidity (${actualHumidity}%) is slightly lower than the expected humidity (${expectedHumidity}%). Regular misting and grouping plants together can help maintain humidity levels.`);
+            } else if (actualHumidity > expectedHumidity + 10) {
+            recommendations.push(`The actual humidity (${actualHumidity}%) is significantly higher than the expected humidity (${expectedHumidity}%). Ensure good air circulation and avoid overwatering to prevent fungal growth.`);
+            } else if (actualHumidity > expectedHumidity) {
+            recommendations.push(`The actual humidity (${actualHumidity}%) is slightly higher than the expected humidity (${expectedHumidity}%). Consider reducing watering and increasing airflow.`);
+            }
+
+            // Combined Conditions for More Specific Guidance
+            if (actualTemp > expectedTemp && actualHumidity < expectedHumidity) {
+            recommendations.push(`The plant is experiencing high temperatures and low humidity. Increase watering, provide shade, and mist regularly to balance conditions.`);
+            } else if (actualTemp < expectedTemp && actualHumidity > expectedHumidity) {
+            recommendations.push(`The plant is in a cool and humid environment. Reduce excessive moisture and ensure proper drainage to prevent root rot.`);
+            }
+
+            this.recommendation = recommendations.length > 0 ? recommendations.join(" ") : "The environmental conditions are optimal. Keep monitoring for any changes.";
+        }
+}
+
+  },
+  mounted() {
+    this.fetchWeatherData();
   }
+};
+</script>
   
-  .title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .table-container {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 18px;
-  }
-  
-  th, td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  th {
-    background: #f4f4f4;
-    color: #333;
-  }
-  
-  td {
-    background: #fcfcfc;
-  }
-  
-  /* Hover effect for better UI experience */
-  tr:hover {
-    background: #f9f9f9;
-  }
-  
-  /* Recommendation Section */
-  .recommendation-container {
-    background: #E8F5E9;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    color: green;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  </style>
+<style scoped>
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.tables-container {
+  width: 60%;
+}
+
+.table-container {
+  flex-basis: 40%;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 18px;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background: #f4f4f4;
+  color: #333;
+}
+
+td {
+  background: #fcfcfc;
+  color: gray;
+}
+
+tr:hover {
+  background: #f9f9f9;
+}
+
+.recommendation-container {
+  flex-basis: 40%;
+  width: 45%;
+  background: #E8F5E9;
+  padding: 20px;
+  margin-top: 67px;
+  margin-left: 35px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: green;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+</style>

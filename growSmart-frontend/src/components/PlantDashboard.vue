@@ -16,7 +16,7 @@
           <p><strong>Soil Moisture Content:</strong> {{ plant.soil_moisture_content }}%</p>
           <p><strong>Humidity Content:</strong> {{ plant.humidity_content }}%</p>
           <router-link :to="{ name: 'plantdetails', query: plant }">
-            <button>View More</button>
+            <button class="viewmore">View More</button>
           </router-link>
         </div>
       </section>
@@ -99,6 +99,16 @@ export default {
   font-family: "Poppins", serif;
   font-weight: 300px;
   margin-left: 25px;
+}
+.viewmore{
+  margin-top: 20px;
+  background: green;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px; 
+  font-family: "Poppins";
 }
 button {
   margin-top: 20px;

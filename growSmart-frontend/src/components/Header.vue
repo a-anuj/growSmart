@@ -7,6 +7,10 @@
                 <li class="nav-item">Home</li>
             </router-link>
 
+            <router-link to="/plant-dashboard" v-if="showBack">
+                <li class="nav-item">Back</li>
+            </router-link>
+
             <router-link v-if="showAboutUs" to="/about-us">
                 <li class="nav-item">About Us</li>
             </router-link>
@@ -91,6 +95,9 @@ export default{
         },
         showChatBot(){
             return this.$route.name === "PlantDashboard" || this.$route.name === "AddPlant" || this.$route.name === "plantdetails" || this.$route.name === "community";
+        },
+        showBack(){
+            return this.$route.name === "plantdetails"
         }
     }
 }

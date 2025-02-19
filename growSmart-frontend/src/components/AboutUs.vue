@@ -74,7 +74,7 @@ export default {
                 { name: "Hari Prasath", role: "Backend Developer", image: "/src/assets/images/backgr.jpg" },
                 { name: "Anuj", role: "Frontend Developer", image: "/src/assets/images/backgr.jpg" },
                 { name: "Harinie ", role: "AI Specialist", image: "/src/assets/images/backgr.jpg" },
-                { name: "Kissik", role: "UI/UX Designer", image: "/src/assets/images/backgr.jpg" }
+                { name: "Kirla Siva Sai Karthik", role: "UI/UX Designer", image: "/src/assets/images/backgr.jpg" }
             ]
         };
     }

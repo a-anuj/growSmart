@@ -10,6 +10,8 @@ import AboutUsView from '../components/AboutUs.vue';
 import ContactUsView from '../components/ContactUs.vue';
 import PlantAIView from '../components/PlantAI.vue'
 import ChatBotView from '../components/ChatBot.vue';
+import LearningHubView from '../components/LearningHub.vue';
+
 const routes = [
     {
         path:'/',
@@ -67,6 +69,11 @@ const routes = [
         path:'/chatbot',
         name:'chatbot',
         component:ChatBotView
+    },
+    {
+        path:'/learning-hub',
+        name:'learninghub',
+        component:LearningHubView   
     }
 ]
 
@@ -75,4 +82,4 @@ const router = createRouter({
     routes
   })
   
-  export default router
+export default router

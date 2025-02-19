@@ -7,6 +7,10 @@
                 <li class="nav-item">Home</li>
             </router-link>
 
+            <router-link to="/learning-hub" v-if="showLearningHub">
+                <li class="nav-item">Learning Hub</li>
+            </router-link>
+
             <router-link to="/plant-dashboard" v-if="showBack">
                 <li class="nav-item">Back</li>
             </router-link>
@@ -79,25 +83,28 @@ export default{
             return this.$route.name === "PlantDashboard" || this.$route.name === "AddPlant";
         },
         showAboutUs(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login" || this.$route.name === "AddPlant" || this.$route.name === "PlantDashboard" || this.$route.name === "community" || this.$route.name=== "contactus";
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login";
         },
         showContact(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login"  || this.$route.name=== "aboutus";;
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login"  || this.$route.name=== "aboutus" || this.$route.name === "learningub";
         },
         showLogin(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name=== "aboutus" || this.$route.name=== "contactus" ;
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name=== "aboutus" || this.$route.name=== "contactus" || this.$route.name === "learninghub" ;
         },
         showRegister(){
-            return this.$route.name === "home" || this.$route.name === "login" || this.$route.name=== "aboutus" || this.$route.name=== "contactus";
+            return this.$route.name === "home" || this.$route.name === "login" || this.$route.name=== "aboutus" || this.$route.name=== "contactus"  || this.$route.name === "learninghub" ;
         },
         showLogout(){
-            return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register" && this.$route.name !== "aboutus" && this.$route.name !== "contactus";
+            return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register" && this.$route.name !== "aboutus" && this.$route.name !== "contactus" && this.$route.name !== "learninghub";
         },
         showChatBot(){
             return this.$route.name === "PlantDashboard" || this.$route.name === "AddPlant" || this.$route.name === "plantdetails" || this.$route.name === "community";
         },
         showBack(){
             return this.$route.name === "plantdetails"
+        },
+        showLearningHub(){
+            return this.$route.name === "PlantDashboard" || this.$route.name === "login" || this.$route.name === "register" || this.$route.name === "home";
         }
     }
 }

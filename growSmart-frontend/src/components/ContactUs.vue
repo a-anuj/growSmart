@@ -38,9 +38,9 @@
 
     <div class="contact-card">
             <h2>📍 Contact Information</h2>
-            <p><strong>Email:</strong> support@growsmart.com</p>
-            <p><strong>Phone:</strong> +1 234 567 890</p>
-            <p><strong>Address:</strong> 123 Greenway St, Urban City</p>
+            <p><strong>Email:</strong> emailsfromapp@gmail.com</p>
+            <p><strong>Phone:</strong> +91 6382072995 • +91 8074646289</p>
+            <p><strong>Address:</strong> Coimbatore,Tamil Nadu</p>
 
             <!-- Social Media Links -->
             <div class="social-links">

@@ -1,10 +1,9 @@
 <template>
+  <div> 
     <div v-if="loading" class="loader-container">
-      <div class="loader">
-        🌱🌲🌾
-      </div>
+      <div class="loader">🌱🌲🌾</div>
     </div>
-  
+
     <div v-else class="container">
       <div class="textfield">
         <h1><span ref="typedText" class="text-green-600"></span></h1>
@@ -14,8 +13,7 @@
           organic produce right from your home—no experience needed!
         </p>
         <router-link to="/register">
-            <button>Start Growing
-            </button>
+          <button>Start Growing</button>
         </router-link>
       </div>
       <div class="imagefield">
@@ -24,33 +22,34 @@
         </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { onMounted, ref, nextTick } from "vue";
-  import Typed from "typed.js";
-  
-  const typedText = ref(null);
-  const imageSrc = "/home/anuj/Desktop/THIRAN/growSmart/growSmart-frontend/src/assets/images/finalgif.gif"; 
-  const loading = ref(true);
-  
-  onMounted(() => {
-    setTimeout(async () => {
-      loading.value = false;
-  
-      // Ensure DOM updates before initializing Typed.js
-      await nextTick();
-  
-      new Typed(typedText.value, {
-        strings: ["Harvest Fresh,", "Right at Home! 🏡"],
-        typeSpeed: 50,
-        backSpeed: 30,
-        backDelay: 1000,
-        loop: true,
-      });
-    }, 2000); // Simulate a 2-second loading time
-  });
-  </script>
+
+    
+  </div>
+</template>
+
+<script setup>
+import { onMounted, ref, nextTick } from "vue";
+import Typed from "typed.js";
+
+const typedText = ref(null);
+const loading = ref(true);
+
+
+
+onMounted(() => {
+  setTimeout(async () => {
+    loading.value = false;
+    await nextTick();
+    new Typed(typedText.value, {
+      strings: ["Harvest Fresh,", "Right at Home! 🏡"],
+      typeSpeed: 50,
+      backSpeed: 30,
+      backDelay: 1000,
+      loop: true,
+    });
+  }, 2000);
+});
+</script>
   
   <style scoped>
   /* LOADER STYLES */
@@ -148,5 +147,9 @@
     object-fit: cover;
     border-radius: 50px;
   }
-  </style>
+
+
+
+</style>
+
   

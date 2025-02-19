@@ -45,14 +45,57 @@
             </div>
         </section>
 
+        <!-- Reviews Section -->
+        <section class="reviews-section">
+            <h2>User Reviews</h2>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <img src="/src/assets/images/male.png" class="avatar" />
+                    <h3>Roshan</h3>
+                    <p class="location">Kochin, Kerala</p>
+                    <p class="stars">⭐️⭐️⭐️⭐️⭐️</p>
+                    <p class="review-text">"Amazing app! My home garden has never been healthier!"</p>
+                </div>
+                <div class="review-card">
+                    <img src="/src/assets/images/female.jpg" class="avatar" />
+                    <h3>Anjali</h3>
+                    <p class="location">Ramabadhrapuram, Andhra Pradesh</p>
+                    <p class="stars">⭐️⭐️⭐️⭐️⭐️</p>
+                    <p class="review-text">"Super easy to use and very informative!"</p>
+                </div>
+                <div class="review-card">
+                    <img src="/src/assets/images/male.png" class="avatar" />
+                    <h3>Sanjay Kumaran</h3>
+                    <p class="location">Madurai, Tamil Nadu</p>
+                    <p class="stars">⭐️⭐️⭐️⭐️⭐️</p>
+                    <p class="review-text">"A must-have for urban dwellers who love gardening."</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Meet the Team -->
         <section class="team">
             <h2>Meet the Team</h2>
             <div class="team-members">
-                <div class="member" v-for="member in team" :key="member.name">
-                    <img :src="member.image" :alt="member.name">
-                    <h3>{{ member.name }}</h3>
-                    <p>{{ member.role }}</p>
+                <div class="member">
+                    <img src="/src/assets/images/backgr.jpg" alt="Hari Prasath">
+                    <h3>Hari Prasath</h3>
+                    <p>Backend Developer</p>
+                </div>
+                <div class="member">
+                    <img src="/src/assets/images/backgr.jpg" alt="Anuj">
+                    <h3>Anuj</h3>
+                    <p>Frontend Developer</p>
+                </div>
+                <div class="member">
+                    <img src="/src/assets/images/backgr.jpg" alt="Harinie">
+                    <h3>Harinie</h3>
+                    <p>AI Specialist</p>
+                </div>
+                <div class="member">
+                    <img src="/src/assets/images/karthikphoto.jpeg" alt="Siva Sai Karthik">
+                    <h3>Siva Sai Karthik</h3>
+                    <p>UI/UX Designer</p>
                 </div>
             </div>
         </section>
@@ -69,23 +112,13 @@
 <script>
 export default {
     data() {
-        return {
-            team: [
-                { name: "Hari Prasath", role: "Backend Developer", image: "/src/assets/images/backgr.jpg" },
-                { name: "Anuj", role: "Frontend Developer", image: "/src/assets/images/backgr.jpg" },
-                { name: "Harinie ", role: "AI Specialist", image: "/src/assets/images/backgr.jpg" },
-                { name: "Kirla Siva Sai Karthik", role: "UI/UX Designer", image: "/src/assets/images/backgr.jpg" }
-            ]
-        };
+        return {};
     }
 };
 </script>
 
 <style scoped>
 /* General Styles */
-.whatweoffer{
-    margin-bottom: 15px;
-}
 .about-us {
     font-family: "Poppins", sans-serif;
     color: #333;
@@ -125,12 +158,10 @@ export default {
 
 .mission {
     border-top: 5px solid #4CAF50;
-    background: #f4f4f4;
 }
 
 .vision {
     border-top: 5px solid #2E7D32;
-    background: #f4f4f4;
 }
 
 /* Features Section */
@@ -144,12 +175,79 @@ export default {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    
 }
 
 .card img {
     width: 60px;
     margin-bottom: 10px;
+}
+
+/* Reviews Section */
+.reviews-section {
+    background-color: #f3f8f1;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.reviews-section h2 {
+    font-size: 32px;
+    font-family: "Poppins", serif;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.reviews-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.review-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.review-card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.location {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.stars {
+    font-size: 18px;
+    color: #f4c150;
+    margin-bottom: 10px;
+}
+
+.review-text {
+    font-size: 16px;
+    color: #555;
+    font-style: italic;
 }
 
 /* Team Section */
@@ -162,11 +260,23 @@ export default {
 .team-members {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
-    margin-top: 25px;
+    margin-top: 20px;
 }
-.member{
-    margin-right: 40px;
+
+.member {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 200px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.member:hover {
+    transform: scale(1.05);
 }
 
 .member img {
@@ -174,34 +284,90 @@ export default {
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
+    margin-bottom: 10px;
 }
 
-/* CTA Section */
-.cta {
-    text-align: center;
-    padding: 40px;
+.member h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 5px 0;
 }
 
-.cta-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #218838;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: 0.3s;
-    margin-top: 25px;
-}
-
-.cta-button:hover {
-    background: #166534;
+.member p {
+    font-size: 14px;
+    color: #777;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .mission-vision {
+    .team-members {
         flex-direction: column;
         align-items: center;
+    }
+}
+
+/* Call to Action Section */
+.cta {
+    text-align: center;
+    background: #E8F5E9; /* Green background */
+    color: black;
+    padding: 50px 20px;
+    border-radius: 10px;
+    margin: 40px auto;
+    max-width: 800px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.cta:hover {
+    transform: scale(1.05);
+}
+
+.cta h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.cta p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    display: inline-block;
+    background: white;
+    color: #4CAF50;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.cta-button:hover {
+    background: #f4f4f4;
+    transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cta {
+        padding: 30px 15px;
+    }
+    
+    .cta h2 {
+        font-size: 24px;
+    }
+
+    .cta p {
+        font-size: 16px;
+    }
+
+    .cta-button {
+        font-size: 16px;
+        padding: 10px 20px;
     }
 }
 </style>

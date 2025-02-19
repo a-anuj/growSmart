@@ -47,6 +47,10 @@
                 <li class="nav-item">Chatbot</li>
             </router-link>
 
+            <router-link to="/upgrade">
+                <li class="nav-item">Upgrade</li>
+            </router-link>
+
             <router-link v-if="showLogout" to="/" @click="handleLogout">
                 <li class="nav-itemb">Logout</li>
             </router-link>
@@ -83,16 +87,16 @@ export default{
             return this.$route.name === "PlantDashboard" || this.$route.name === "AddPlant";
         },
         showAboutUs(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login";
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login" || this.$route.name === "upgrade";
         },
         showContact(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login"  || this.$route.name=== "aboutus" || this.$route.name === "learningub";
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name === "login"  || this.$route.name=== "aboutus" || this.$route.name === "learningub" || this.$route.name === "upgrade";
         },
         showLogin(){
-            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name=== "aboutus" || this.$route.name=== "contactus" || this.$route.name === "learninghub" ;
+            return this.$route.name === "home" || this.$route.name === "register" || this.$route.name=== "aboutus" || this.$route.name=== "contactus" || this.$route.name === "learninghub" || this.$route.name === "upgrade";
         },
         showRegister(){
-            return this.$route.name === "home" || this.$route.name === "login" || this.$route.name=== "aboutus" || this.$route.name=== "contactus"  || this.$route.name === "learninghub" ;
+            return this.$route.name === "home" || this.$route.name === "login" || this.$route.name=== "aboutus" || this.$route.name=== "contactus"  || this.$route.name === "learninghub" || this.$route.name === "upgrade";
         },
         showLogout(){
             return this.$route.name !== "home" && this.$route.name !== "login" && this.$route.name !== "register" && this.$route.name !== "aboutus" && this.$route.name !== "contactus" && this.$route.name !== "learninghub";
@@ -104,7 +108,7 @@ export default{
             return this.$route.name === "plantdetails"
         },
         showLearningHub(){
-            return this.$route.name === "PlantDashboard" || this.$route.name === "login" || this.$route.name === "register" || this.$route.name === "home";
+            return this.$route.name === "login" || this.$route.name === "register" || this.$route.name === "home" || this.$route.name === "upgrade";
         }
     }
 }
@@ -146,7 +150,7 @@ export default{
 .logo {
   font-size: 24px;
   font-weight: bold;
-  margin-right: 500px;
+  margin-right: 400px;
   margin-left: 80px;
   height: 50px;
 

@@ -11,6 +11,7 @@ import ContactUsView from '../components/ContactUs.vue';
 import PlantAIView from '../components/PlantAI.vue'
 import ChatBotView from '../components/ChatBot.vue';
 import LearningHubView from '../components/LearningHub.vue';
+import UpgradePremiumView from '../components/UpgradePremium.vue';
 
 const routes = [
     {
@@ -74,6 +75,11 @@ const routes = [
         path:'/learning-hub',
         name:'learninghub',
         component:LearningHubView   
+    },
+    {
+        path:'/upgrade',
+        name:'upgradepremium',
+        component:UpgradePremiumView
     }
 ]
 

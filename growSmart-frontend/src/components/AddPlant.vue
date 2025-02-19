@@ -100,7 +100,7 @@ export default {
             if (this.scientificName) {
                 const formData = new FormData();
                 formData.append('name', this.name);
-                formData.append('startDate', new Date().toUTCString().split(' GMT')[0]); // Current date
+                formData.append('startDate', new Date().toUTCString().split(' ')[0] + ' ' + new Date().toUTCString().split(' ')[1] + ' ' + new Date().toUTCString().split(' ')[2] + ' ' + new Date().toUTCString().split(' ')[3]); // Current date
                 formData.append('soilMoisture', this.soilMoisture);
                 formData.append('humidityContent', this.humidityContent);
                 formData.append('userId', this.userId);

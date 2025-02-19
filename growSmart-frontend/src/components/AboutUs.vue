@@ -23,22 +23,22 @@
             <h2 class="whatweoffer">What We Offer...</h2>
             <div class="feature-cards">
                 <div class="card">
-                    <img src="/src/assets/images/plantpic.png" alt="AI Plant Care">
+                    <img src="/src/assets/images/AI-POWERED PLANT.jpeg" alt="AI Plant Care">
                     <h3>AI-powered Plant Care</h3>
                     <p>Smart recommendations to keep your plants thriving.</p>
                 </div>
                 <div class="card">
-                    <img src="/src/assets/images/photo1.jpeg" alt="Real-time Monitoring">
+                    <img src="/src/assets/images/Real-Time Montioring1.jpeg" alt="Real-time Monitoring">
                     <h3>Real-time Monitoring</h3>
                     <p>Track plant health with IoT-ready features.</p>
                 </div>
                 <div class="card">
-                    <img src="/src/assets/images/photo2.jpeg" alt="Community Market">
+                    <img src="/src/assets/images/Community_cleanup 2.png" alt="Community Market">
                     <h3>Community</h3>
                     <p>Discussion forum where users can share their experience.</p>
                 </div>
                 <div class="card">
-                    <img src="/src/assets/images/photo3.jpeg" alt="Learning Hub">
+                    <img src="/src/assets/images/learningh.jpeg" alt="Learning Hub">
                     <h3>Learning Hub</h3>
                     <p>Step-by-step guides for urban farming success.</p>
                 </div>
@@ -78,17 +78,17 @@
             <h2>Meet the Team</h2>
             <div class="team-members">
                 <div class="member">
-                    <img src="/src/assets/images/backgr.jpg" alt="Hari Prasath">
+                    <img src="/src/assets/images/hariphoto.jpeg" alt="Hari Prasath">
                     <h3>Hari Prasath</h3>
                     <p>Backend Developer</p>
                 </div>
                 <div class="member">
-                    <img src="/src/assets/images/backgr.jpg" alt="Anuj">
+                    <img src="/src/assets/images/anujphoto.jpeg" alt="Anuj">
                     <h3>Anuj</h3>
                     <p>Frontend Developer</p>
                 </div>
                 <div class="member">
-                    <img src="/src/assets/images/backgr.jpg" alt="Harinie">
+                    <img src="/src/assets/images/hariniephoto.jpeg" alt="Harinie">
                     <h3>Harinie</h3>
                     <p>AI Specialist</p>
                 </div>
@@ -178,8 +178,9 @@ export default {
 }
 
 .card img {
-    width: 60px;
+    width: 70px;
     margin-bottom: 10px;
+    border-radius: 10%;
 }
 
 /* Reviews Section */

@@ -4,7 +4,7 @@
       <div class="headbutton">
         <div class="head">
           <h1 class="heading">{{ greeting }}, {{ firstName }}! {{ emoji }}</h1>
-          <p class="subheading">Your plants are thriving! </p>
+          <p class="subheading">Your plants appear here! </p>
         </div>
       </div>
       

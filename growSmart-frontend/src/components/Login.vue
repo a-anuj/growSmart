@@ -33,10 +33,10 @@
   
   <script>
   import Header from './Header.vue';
-  import image1 from '/src/assets/images/plantpic.png';
-  import image2 from '/src/assets/images/photo1.jpeg';
-  import image3 from '/src/assets/images/photo2.jpeg';
-  import image4 from '/src/assets/images/photo3.jpeg';
+  import image1 from '/src/assets/images/sg.jpeg';
+  import image2 from '/src/assets/images/hp.jpg';
+  import image3 from '/src/assets/images/Real-Time Montioring1.jpeg';
+  import image4 from '/src/assets/images/uf.jpeg';
   
   export default {
     components: {

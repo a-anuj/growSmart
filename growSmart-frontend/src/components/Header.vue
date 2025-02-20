@@ -7,6 +7,8 @@
                 <li class="nav-item">Home</li>
             </router-link>
 
+            
+
             <router-link to="/learning-hub" v-if="showLearningHub">
                 <li class="nav-item">Learning Hub</li>
             </router-link>
@@ -50,6 +52,7 @@
             <router-link to="/upgrade">
                 <li class="nav-item">Upgrade</li>
             </router-link>
+
 
             <router-link v-if="showLogout" to="/" @click="handleLogout">
                 <li class="nav-itemb">Logout</li>
